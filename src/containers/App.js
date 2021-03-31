@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import CardList from "../components/CardList";
 //import { robots } from "./robots";
 import SearchBox from "../components/SearchBox";
@@ -6,49 +6,52 @@ import Scroll from "../components/Scroll";
 import "./App.css";
 import ErrorBoundary from "../components/ErrorBoundary";
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      robots: [],
-      searchField: "",
-    };
-  }
+function App() {
+  const [robots, setRobots] = useState([]);
+  const [searchField, setSearchfield] = useState("");
+  const [count, setCount] = useState(0);
 
-  componentDidMount() {
+  // componentDidMount() {
+  //   fetch("https://jsonplaceholder.typicode.com/users")
+  //     .then((response) => response.json())
+  //     .then((users) => {
+  //       this.setState({ robots: users })
+  //     });
+  // }
+  useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
       .then((users) => {
-        this.setState({ robots: users });
+        setRobots(users);
+        // console.log(robots,searchField);
+        console.log(count);
       });
-  }
+  }, [count]); //2nd argument, [], gives list to stop infinite loop request replicating componentdidmount
 
-  onSearchChange = (event) => {
+  const onSearchChange = (event) => {
     //console.log(event.target.value);
-    this.setState({ searchField: event.target.value });
+    setSearchfield(event.target.value);
   };
 
-  render() {
-    const { robots, searchField } = this.state;
-    const filteredRobots = robots.filter((robot) => {
-      return robot.name.toLowerCase().includes(searchField.toLowerCase());
-    });
+  const filteredRobots = robots.filter((robot) => {
+    return robot.name.toLowerCase().includes(searchField.toLowerCase());
+  });
 
-    if (!robots.length) {
-      return <h1>Loading</h1>;
-    } else {
-      return (
-        <div className="tc">
-          <h1 className="f1">RoboFriends</h1>
-          <SearchBox searchChange={this.onSearchChange} />
-          <Scroll>
-            <ErrorBoundary>
-              <CardList robots={filteredRobots} />
-            </ErrorBoundary>
-          </Scroll>
-        </div>
-      );
-    }
+  if (!robots.length) {
+    return <h1>Loading</h1>;
+  } else {
+    return (
+      <div className="tc">
+        <h1 className="f1">RoboFriends</h1>
+        <button onClick={() => setCount(count + 1)}>Click Me</button>
+        <SearchBox searchChange={onSearchChange} />
+        <Scroll>
+          <ErrorBoundary>
+            <CardList robots={filteredRobots} />
+          </ErrorBoundary>
+        </Scroll>
+      </div>
+    );
   }
 }
 
