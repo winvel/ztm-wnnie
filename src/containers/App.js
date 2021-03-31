@@ -27,6 +27,7 @@ function App() {
         console.log(count);
       });
   }, [count]); //2nd argument, [], gives list to stop infinite loop request replicating componentdidmount
+//only runs when count changes
 
   const onSearchChange = (event) => {
     //console.log(event.target.value);
