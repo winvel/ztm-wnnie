@@ -7,8 +7,8 @@ import Scroll from "../components/Scroll";
 import "./App.css";
 import ErrorBoundary from "../components/ErrorBoundary";
 
-import { setSearchField } from "../actions";
-import { requestRobots } from "../reducers";
+import { setSearchField, requestRobots} from "../actions";
+
 
 const mapStateToProps = (state) => {
   return {
@@ -16,13 +16,13 @@ const mapStateToProps = (state) => {
     robots: state.requestRobots.robots,
     isPending: state.requestRobots.isPending,
     error: state.requestRobots.error,
-  };
+  }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
-    onRequestRobots: () => requestRobots(dispatch),
+    onRequestRobots: () => dispatch(requestRobots()),
   };
 };
 
